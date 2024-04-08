@@ -1,26 +1,23 @@
 import React from "react";
+import { useFormContext } from "react-hook-form";
 
 interface InputFieldProps {
   label: string;
-  name: string;
   type: string;
-  register: any;
-  error?: string | undefined;
-  onBlur?: () => void;
-  dirtyFields?: any;
+  name: string;
 }
 
-const InputField: React.FC<InputFieldProps> = ({
-  label,
-  name,
-  type,
-  register,
-  error,
-  onBlur,
-  dirtyFields,
-}) => {
-  const isDirty = dirtyFields && dirtyFields[name];
-  const showError = isDirty && error;
+const InputField: React.FC<InputFieldProps> = ({ label, type, name }) => {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+
+  // const name = label.toLowerCase();
+
+  const error = errors[name]?.message;
+  // const isDirty = dirtyFields && dirtyFields[name];
+  // const showError =  error;
 
   return (
     <div className="mb-4">
@@ -28,16 +25,16 @@ const InputField: React.FC<InputFieldProps> = ({
         {label}
       </label>
       <input
+        {...register(name)}
         className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-          showError ? "border-red-500" : "border-gray-300"
+          error ? "border-red-500" : "border-gray-300"
         }`}
-        name={name}
         type={type}
         placeholder={`Enter ${label}`}
-        {...register}
-        onBlur={onBlur}
       />
-      {showError && <p className="text-red-500 text-xs italic">{error}</p>}
+      {error && (
+        <p className="text-red-500 text-xs italic">{error.toString()}</p>
+      )}
     </div>
   );
 };

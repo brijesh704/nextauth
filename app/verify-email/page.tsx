@@ -21,7 +21,7 @@ const EmailVerificationPage = () => {
 
       try {
         const response = await axios.get(
-          `http://localhost:8080/auth/verifyemail/${token}`
+          `${process.env.URL}/auth/verifyemail/${token}`
         );
 
         if (response.status === 200) {

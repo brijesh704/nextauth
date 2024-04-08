@@ -2,6 +2,8 @@
 import React, { useEffect } from "react";
 import SignupForm from "../../components/SignupForm";
 import { useRouter } from "next/navigation";
+import { QueryClient, QueryClientProvider } from "react-query";
+const queryClient = new QueryClient();
 
 const page: React.FC = () => {
   const router = useRouter();
@@ -15,7 +17,9 @@ const page: React.FC = () => {
   }, []);
   return (
     <div>
-      <SignupForm />
+      <QueryClientProvider client={queryClient}>
+        <SignupForm />
+      </QueryClientProvider>
     </div>
   );
 };

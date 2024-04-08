@@ -15,7 +15,7 @@ const ForgotPasswordPage: React.FC = () => {
       const email = formData.get("email") as string;
 
       const response = await axios.post(
-        "http://localhost:8080/auth/forgot-password",
+        `${process.env.URL}/auth/forgot-password`,
         { email }
       );
       if (response.status === 200) {

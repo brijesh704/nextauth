@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import AvatarEditor from "react-avatar-editor";
+import axiosInstance from "../../components/axiosInstance";
 
 interface UserData {
   _id: string;
@@ -59,8 +60,8 @@ const DashboardPage: React.FC = () => {
 
       formData.append("file", file);
       console.log(formData, "cropeddddd img");
-      const response = await axios.put(
-        `http://localhost:8080/auth/upload-photo/${userData?._id}`,
+      const response = await axiosInstance.put(
+        `/auth/upload-photo/${userData?._id}`,
         formData,
         {
           headers: {
@@ -81,7 +82,7 @@ const DashboardPage: React.FC = () => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
       axios
-        .get("http://localhost:8080/auth/userdata", {
+        .get(`${process.env.URL}/auth/userdata`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },

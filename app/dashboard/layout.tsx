@@ -32,7 +32,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
       axios
-        .get("http://localhost:8080/auth/userdata", {
+        .get(`${process.env.URL}/auth/userdata`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -77,7 +77,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
             {userData?.photo !== null ? (
               <li>
                 <img
-                  src={`http://localhost:8080/${userData?.photo}`}
+                  src={`${process.env.URL}/${userData?.photo}`}
                   alt="Profile Avatar"
                   className="h-20 w-20 rounded-full "
                 />

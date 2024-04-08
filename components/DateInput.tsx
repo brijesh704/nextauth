@@ -1,29 +1,23 @@
 import React from "react";
+import { Controller, useFormContext } from "react-hook-form";
 import DatePicker from "react-datepicker";
-import { Controller } from "react-hook-form";
 import "react-datepicker/dist/react-datepicker.css";
 
 interface DateInputProps {
   label: string;
   name: string;
-  control: any;
-  error?: string | undefined;
-  dobError?: string | undefined;
-  onBlur?: () => void;
-  dirtyFields?: any;
-  touched?: boolean;
 }
 
-const DateInput: React.FC<DateInputProps> = ({
-  label,
-  name,
-  control,
-  error,
-  dobError,
-  onBlur,
-  dirtyFields,
-  touched,
-}) => {
+const DateInput: React.FC<DateInputProps> = ({ label, name }) => {
+  const { control, formState } = useFormContext();
+
+  const { errors, dirtyFields } = formState;
+
+  const nameLowerCase = name.toLowerCase();
+  const error = errors[nameLowerCase]?.message;
+  const isDirty = dirtyFields && dirtyFields[nameLowerCase];
+  const showError = isDirty && error;
+
   return (
     <div className="mb-4">
       <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -40,20 +34,17 @@ const DateInput: React.FC<DateInputProps> = ({
               dateFormat="dd/MM/yyyy"
               placeholderText={`Select ${label}`}
               className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                error || dobError || (touched && !field.value)
-                  ? "border-red-500"
-                  : "border-gray-300"
+                showError ? "border-red-500" : "border-gray-300"
               }`}
               onKeyDown={(e) => e.preventDefault()}
               peekNextMonth
               showMonthDropdown
               showYearDropdown
-              onBlur={onBlur}
+              onBlur={field.onBlur}
             />
-            {dobError && (
-              <p className="text-red-500 text-xs italic">{dobError}</p>
+            {showError && (
+              <p className="text-red-500 text-xs italic">{String(error)}</p>
             )}
-            {error && <p className="text-red-500 text-xs italic">{error}</p>}
           </div>
         )}
       />
